@@ -7,8 +7,8 @@ st.set_page_config(
     layout="centered",
 )
 
-API_URL = "https://router.huggingface.co/v1/chat/completions"
-MODEL = "openai/gpt-oss-120b:fastest"
+API_URL = "https://api.groq.com/openai/v1/chat/completions"
+MODEL = "openai/gpt-oss-20b"
 
 st.title("🌿 TouchGrass AI")
 st.subheader("Less scrolling. More exploring.")
@@ -39,9 +39,8 @@ environment = st.selectbox(
     ["Park", "Garden", "Neighbourhood", "Trail"],
 )
 
-
 def generate_quest(prompt):
-    token = st.secrets["hf_token"]
+    token = st.secrets["groq_token"]
 
     response = requests.post(
         API_URL,
@@ -56,18 +55,13 @@ def generate_quest(prompt):
                     "role": "system",
                     "content": (
                         "You are TouchGrass AI, a friendly "
-                        "outdoor adventure companion. "
-                        "Create safe, practical, enjoyable "
-                        "outdoor quests. Never invent real "
-                        "locations or claim to identify "
-                        "wildlife without evidence. "
-                        "Keep the response concise."
+                        "outdoor adventure companion. Create "
+                        "safe, practical, concise outdoor quests. "
+                        "Never invent real locations or claim "
+                        "to identify wildlife without evidence."
                     ),
                 },
-                {
-                    "role": "user",
-                    "content": prompt,
-                },
+                {"role": "user", "content": prompt},
             ],
             "max_tokens": 300,
             "stream": False,
